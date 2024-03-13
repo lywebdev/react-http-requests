@@ -20,12 +20,16 @@ function App() {
     // ];
 
     const [jokes, setJokes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     async function fetchJokesHandler() {
+        setIsLoading(true);
+
         const response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=10');
         const data = await response.json();
 
         setJokes(data.jokes);
+        setIsLoading(false);
     }
 
     return (
@@ -34,7 +38,9 @@ function App() {
                 <button onClick={fetchJokesHandler}>Fetch Jokes</button>
             </section>
             <section>
-                <JokeList jokes={jokes}/>
+                {!isLoading && jokes.length > 0 && <JokeList jokes={jokes}/>}
+                {!isLoading && jokes.length === 0 && <p>Шутки не были получены</p>}
+                {isLoading && <p>Загрузка...</p>}
             </section>
         </React.Fragment>
     );
