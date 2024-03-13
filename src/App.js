@@ -21,14 +21,11 @@ function App() {
 
     const [jokes, setJokes] = useState([]);
 
-    function fetchJokesHandler() {
-        fetch('https://v2.jokeapi.dev/joke/Any?amount=10')
-            .then(response => {
-                return response.json();
-            }).then(data => {
-                setJokes(data.jokes);
-            })
-        ;
+    async function fetchJokesHandler() {
+        const response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=10');
+        const data = await response.json();
+
+        setJokes(data.jokes);
     }
 
     return (
