@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import JokeList from "./components/JokeList";
 import "./App.css";
@@ -19,14 +19,14 @@ function App() {
     //   },
     // ];
 
-    // let
+    const [jokes, setJokes] = useState([]);
 
     function fetchJokesHandler() {
         fetch('https://v2.jokeapi.dev/joke/Any?amount=10')
             .then(response => {
                 return response.json();
             }).then(data => {
-
+                setJokes(data.jokes);
             })
         ;
     }
@@ -34,10 +34,10 @@ function App() {
     return (
         <React.Fragment>
             <section>
-                <button>Fetch Jokes</button>
+                <button onClick={fetchJokesHandler}>Fetch Jokes</button>
             </section>
             <section>
-                <JokeList jokes={dummyJokes}/>
+                <JokeList jokes={jokes}/>
             </section>
         </React.Fragment>
     );
