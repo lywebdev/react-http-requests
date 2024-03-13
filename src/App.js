@@ -21,16 +21,43 @@ function App() {
 
     const [jokes, setJokes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     async function fetchJokesHandler() {
         setIsLoading(true);
+        setError(null);
 
-        const response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=10');
-        const data = await response.json();
+        try {
+            let response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=10/asdasdas/dasda');
+            response = await response.json();
 
-        setJokes(data.jokes);
+            if (response.error) {
+                throw new Error(response.message);
+            }
+
+            setJokes(response.jokes);
+        } catch (error) {
+            setError(error.message);
+        }
+
         setIsLoading(false);
     }
+    
+
+    let content = <p>Шуток не найдено</p>;
+
+    if (jokes.length > 0) {
+        content = <JokeList jokes={jokes}/>;
+    }
+
+    if (error) {
+        content = <p>{error}</p>;
+    }
+
+    if (isLoading) {
+        content = <p>Загрузка...</p>;
+    }
+
 
     return (
         <React.Fragment>
@@ -38,9 +65,7 @@ function App() {
                 <button onClick={fetchJokesHandler}>Fetch Jokes</button>
             </section>
             <section>
-                {!isLoading && jokes.length > 0 && <JokeList jokes={jokes}/>}
-                {!isLoading && jokes.length === 0 && <p>Шутки не были получены</p>}
-                {isLoading && <p>Загрузка...</p>}
+                {content}
             </section>
         </React.Fragment>
     );
