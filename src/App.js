@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 
 import JokeList from "./components/JokeList";
 import "./App.css";
+import AddJoke from "./components/AddJoke";
 
 function App() {
     // const dummyJokes = [
@@ -28,7 +29,7 @@ function App() {
         setError(null);
 
         try {
-            let response = await fetch('https://v2.jokeapi.dev/joke/Any?amount=10/asdasdas/dasda');
+            let response = await fetch('https://react-udemy-http-requests-default-rtdb.firebaseio.com/');
             response = await response.json();
 
             if (response.error) {
@@ -46,7 +47,10 @@ function App() {
     useEffect(() => {
         fetchJokesHandler();
     }, [fetchJokesHandler]);
-    
+
+    function addJokeHandler() {
+
+    }
 
     let content = <p>Шуток не найдено</p>;
 
@@ -65,6 +69,9 @@ function App() {
 
     return (
         <React.Fragment>
+            <section>
+                <AddJoke onAddJoke={addJokeHandler} />
+            </section>
             <section>
                 <button onClick={fetchJokesHandler}>Fetch Jokes</button>
             </section>
