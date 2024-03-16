@@ -29,14 +29,24 @@ function App() {
         setError(null);
 
         try {
-            let response = await fetch('https://react-udemy-http-requests-default-rtdb.firebaseio.com/');
+            let response = await fetch('https://react-udemy-http-requests-default-rtdb.firebaseio.com/jokes.json');
             response = await response.json();
 
             if (response.error) {
                 throw new Error(response.message);
             }
 
-            setJokes(response.jokes);
+            const loadedJokes = [];
+            for (const key in response) {
+                loadedJokes.push({
+                    id: key,
+                    type: response[key].type,
+                    setup: response[key].setup,
+                    punchline: response[key].punchline,
+                });
+            }
+
+            setJokes(loadedJokes.reverse());
         } catch (error) {
             setError(error.message);
         }
@@ -48,13 +58,21 @@ function App() {
         fetchJokesHandler();
     }, [fetchJokesHandler]);
 
-    function addJokeHandler() {
+    async function addJokeHandler(joke) {
+        const response = await fetch('https://react-udemy-http-requests-default-rtdb.firebaseio.com/jokes.json', {
+            method: 'post',
+            body: JSON.stringify(joke),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
+        const data = await response.json();
     }
 
     let content = <p>Шуток не найдено</p>;
 
-    if (jokes.length > 0) {
+    if (jokes !== null && jokes !== undefined && jokes.length > 0) {
         content = <JokeList jokes={jokes}/>;
     }
 

@@ -30,7 +30,7 @@ function AddJoke(props) {
                 <textarea rows={5} type="text" id='setup' ref={setupRef}></textarea>
             </div>
             <div className={styles.control}>
-                <label htmlFor='punchline'>Type</label>
+                <label htmlFor='punchline'>Punchline</label>
                 <textarea rows={5} type="text" id='punchline' ref={punchlineRef}></textarea>
             </div>
             <button>Add joke</button>
